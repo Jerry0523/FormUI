@@ -203,18 +203,22 @@ public struct NestedContentContainer<Content: View, ActionView: View>: View {
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if let title, !title.isEmpty {
-                HStack {
-                    Text(title)
-                    Spacer()
-                    actionView()
-                }
-            }
+        if !isIndented, (title == nil || title?.isEmpty == true) {
             content()
+        } else {
+            VStack(alignment: .leading, spacing: 12) {
+                if let title, !title.isEmpty {
+                    HStack {
+                        Text(title)
+                        Spacer()
+                        actionView()
+                    }
+                }
+                content()
+            }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, isIndented ? 12 : 0)
+                .padding(.vertical, isIndented ? 6 : 0)
         }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, isIndented ? 12 : 0)
-            .padding(.vertical, isIndented ? 6 : 0)
     }
 }
